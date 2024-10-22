@@ -33,7 +33,10 @@ export class TodosController {
 
     public createTodo = async (req:Request, res:Response) =>{
         const [error, createTodoDTO] = CreateTodoDTO.create(req.body);
-        if(error) return res.status(400).json({ error });
+        if(error) {
+            res.status(400).json({ error });
+            return
+        }
        
 
         const todo = await prisma.todo.create({
@@ -49,7 +52,10 @@ export class TodosController {
         const id= +req.params.id;
         const [error, updateTodoDTO] = UpdateTodoDTO.create({ ...req.body, id });
 
-        if( error ) return res.status(400).json({error});
+        if( error ) {
+            res.status(400).json({error});
+            return
+        }
 
         const todo = await prisma.todo.findUnique({             
             where: { id: id }
